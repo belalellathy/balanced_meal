@@ -1,5 +1,6 @@
 import 'package:balanced_meal/API/api_service.dart';
 import 'package:balanced_meal/cards/food_summary.dart';
+import 'package:balanced_meal/models/user_detils_model.dart';
 import 'package:balanced_meal/providers/order_provide.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -14,7 +15,9 @@ class Ordersummary extends StatefulWidget {
 class _OrdersummaryState extends State<Ordersummary> {
   @override
   Widget build(BuildContext context) {
-    double total_calories = ModalRoute.of(context)!.settings.arguments as double;
+    List<dynamic> args = ModalRoute.of(context)!.settings.arguments as List<dynamic>;
+    double total_calories = args[0] as double;
+    UserDetailsModel userDetails = args[1] as UserDetailsModel;
     //double total_calories = 2000; // Example value, replace with actual logic
    OrderProvider orderprovider = Provider.of<OrderProvider>(context);
     return Scaffold(
@@ -58,13 +61,42 @@ class _OrdersummaryState extends State<Ordersummary> {
                     SizedBox(height: 10,),
                     ElevatedButton(
                       onPressed: () async {
-                        await sendOrder(orderprovider);
+                        if (orderprovider.gained_cal < (10/100) * total_calories) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text("You need to add more food to your order!"))
+                          );
+                          
+                          return;
+                        }else{
+
+                          bool success = await sendOrder(orderprovider);
+                            if (success) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text("Order placed successfully!"))
+                              );
+                              // Clear the order
+                              orderprovider.clearOrder();
+                              Navigator.of(context).pushReplacementNamed("createorder",arguments: userDetails);
+
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text("Failed to place order. Please try again."),backgroundColor: Colors.red,)
+                              );
+                            }
+
+                          
+                           
+                           
+
+                          
+                        }
+
                         //orderprovider.addToOrder(FoodModel)
                        
                         setState(() {
                           
                         });
-                        // Handle order creation logic here
+                        
                       },
                       child: Text("Confirm",
                         style: TextStyle(

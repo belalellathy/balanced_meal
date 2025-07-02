@@ -21,6 +21,16 @@ class OrderProvider extends ChangeNotifier {
     gained_cal-=cal;
     notifyListeners();
   }
+  void clearOrder() {
+    for(int i = 0; i < orderedfood.length; i++){
+      orderedfood[i].quantity = 0;
+    }
+    orderedfood.clear();
+    totalPrice = 0;
+    gained_cal = 0;
+    
+    notifyListeners();
+  }
 
   void addToOrder(FoodModel food) {
     if (orderedfood.contains(food)) {

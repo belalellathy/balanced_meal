@@ -97,12 +97,22 @@ class _CreateOrderState extends State<CreateOrder> {
                     SizedBox(height: 10,),
                     ElevatedButton(
                       onPressed: () {
-                        //orderprovider.addToOrder(FoodModel)
-                        Navigator.of(context).pushNamed("ordersummary",arguments: total_calories );
+                        if (orderprovider.gained_cal < (10/100) * total_calories) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text("You need to add more food to your order!"),backgroundColor: Colors.red,)
+                          );
+                          
+                          return;
+                        }else{
+                          Navigator.of(context).pushNamed("ordersummary",arguments: [total_calories,userDetails
+                          ] );
+                        }
+                        
+                        
                         setState(() {
                           
                         });
-                        // Handle order creation logic here
+                       
                       },
                       child: Text("Place Order",
                         style: TextStyle(

@@ -202,7 +202,8 @@ class _UserdetailsScreenState extends State<UserdetailsScreen> {
                       SnackBar(
                         content: Text(
                           "Please fill all the fields with integer values.",
-                        ),
+                        ),backgroundColor: Colors.red,
+                        
                       ),
                     );
                   }

@@ -42,8 +42,9 @@ class FoodSummary extends StatelessWidget {
                 children: [
                    InkWell(
               onTap: () {
+                                orderprovider.removetotal(orderprovider.orderedfood[index].price, orderprovider.orderedfood[index].calories);
                 orderprovider.removeQuantity(orderprovider.orderedfood[index]);
-                orderprovider.removetotal(orderprovider.orderedfood[index].price, orderprovider.orderedfood[index].calories);
+
               },
               child: Icon(Icons.remove_circle,color: Color(0xFFF25700),),
             ),
